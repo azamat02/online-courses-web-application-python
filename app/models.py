@@ -5,6 +5,8 @@ class SimpleUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    def get_name(self):
+        return self.username
 
 class Courses(models.Model):
     course_name = models.CharField(max_length=1000)
