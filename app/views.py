@@ -15,7 +15,7 @@ def index(request):
 class registerView(CreateView):
     form_class = SimpleUserForm
     success_url = reverse_lazy('login')
-    template_name = 'html/registration.html'
+    template_name = 'registration/registration.html'
 
 class GetCourseByID(DetailView):
     model = Courses
