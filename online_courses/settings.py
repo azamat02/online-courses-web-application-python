@@ -28,8 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'app.SimpleUser'
-LOGIN_REDIRECT_URL = "app_html:index"
-LOGOUT_REDIRECT_URL = "app_html:index"
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "index"
 
 # Application definition
 
