@@ -80,10 +80,8 @@ class AboutView(TemplateView):
 class ProfileView(TemplateView):
     template_name = "registration/user_page.html"
 
-class SimpleUserChangeForm(UserChangeForm):
-    class Meta(UserChangeForm.Meta):
-        model = SimpleUser
-        fields = ('email', 'username', 'first_name', 'last_name')
+class ChangeView(TemplateView):
+    template_name = "register/change_user.html"
 
 def search_by_course_text(request):
     if request.method == "POST" and len(request.POST.get("search_field")) > 0:

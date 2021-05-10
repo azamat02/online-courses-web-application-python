@@ -12,7 +12,7 @@ class SimpleUserChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = SimpleUser
-        fields = ('email', 'username', 'first_name', 'last_name', 'password')
+        fields = ('first_name', 'last_name', 'password')
 
 class CommentsForm(forms.ModelForm):
     class Meta:
