@@ -5,11 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Courses</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/courses.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/slider.css">
+    {% load static %}
+    <link href="{% static 'app/css/auth.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/courses.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/footer.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/navbar.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/slider.css' %}" rel="stylesheet">
 </head>
 <body>
     <!-- Navbar -->
@@ -25,8 +27,8 @@
             <li class="nav-item"><a href="/">Help</a></li>
         </ul>
         <ul class="nav-links">
-            <li class="nav-item colored"><a href="sign_in.html">Sign in</a></li>
-            <li class="nav-item button"><a href="sign_up.html">Sign up</a></li>
+            <li class="nav-item colored"><a href="{% url 'login' %}">Sign in</a></li>
+            <li class="nav-item button"><a href="{% url 'registration' %}">Sign up</a></li>
         </ul>
     </nav>
 
