@@ -26,13 +26,21 @@
             <li class="nav-item"><a href="/">Contacts</a></li>
             <li class="nav-item"><a href="/">Help</a></li>
         </ul>
+        {%block login%}
+        {% if user.is_authenticated%}
+        <ul class="nav-links">
+            <li class="nav-item colored"><a href="{% url 'logout' %}">log out</a></li>
+            <li class="nav-item button"><a href="{% url 'profile' user.username%}">{{user.username}}</a></li>
+        </ul>
+        {%else%}
         <ul class="nav-links">
             <li class="nav-item colored"><a href="{% url 'login' %}">Sign in</a></li>
             <li class="nav-item button"><a href="{% url 'registration' %}">Sign up</a></li>
         </ul>
+        {%endif%}
+        {%endblock%}
     </nav>
 
-    
     <main>
         <!-- Slider -->
 

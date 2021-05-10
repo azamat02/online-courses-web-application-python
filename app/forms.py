@@ -8,6 +8,12 @@ class SimpleUserForm(UserCreationForm):
         model = SimpleUser
         fields = ('email', 'username', 'first_name', 'last_name')
 
+class SimpleUserChangeForm(UserChangeForm):
+
+    class Meta(UserChangeForm.Meta):
+        model = SimpleUser
+        fields = ('first_name', 'last_name', 'password')
+
 class CommentsForm(forms.ModelForm):
     class Meta:
         model = Comment

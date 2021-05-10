@@ -13,6 +13,6 @@ urlpatterns = [
     path("course/id", GetCourseByID, name="courseID"),
     path("contatctUs", ContactsView.as_view(), name="ContactUs"),
     path("my_curses/", my_courses, name="my_curses"),
-    path("userPage", ProfileView, name="userPage"),
-    # path("id/coursePage", name="CoursePage")
+    path("user/<username>/change_user/", ChangeView.as_view(), name="change_user"),
+    path("user/<username>", ProfileView.as_view(), name="profile"),
 ]
