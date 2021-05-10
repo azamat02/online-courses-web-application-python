@@ -6,6 +6,9 @@ class SimpleUser(AbstractUser):
     def __str__(self):
         return self.username
 
+    def get_name(self):
+        return self.username
+
 class Courses(models.Model):
     course_name = models.CharField(max_length=1000)
     course_description = models.TextField('description')
@@ -14,7 +17,7 @@ class Courses(models.Model):
     counter_rating = models.FloatField(default=0.0)
     course_requirements = models.TextField('requirements')
 
-    def str(self):
+    def __str__(self):
         return self.course_name
 
     def get_rating(self):
