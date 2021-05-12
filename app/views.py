@@ -4,12 +4,13 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
-
 from .forms import *
-
+from .serializers import *
+from rest_framework import status
+from rest_framework.decorators import api_view # making sure to receive Request, add context to Response
+from rest_framework.response import Response # is needed to return client defined response
 
 def index(request):
-
     return render(request, "app/index.html")
 
 class registerView(CreateView):
@@ -81,7 +82,7 @@ class ProfileView(TemplateView):
     template_name = "registration/user_page.html"
 
 class ChangeView(TemplateView):
-    template_name = "register/change_user.html"
+    template_name = "register/change_userserializers.py.html"
 
 def search_by_course_text(request):
     if request.method == "POST" and len(request.POST.get("search_field")) > 0:

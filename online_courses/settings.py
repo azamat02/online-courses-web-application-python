@@ -36,11 +36,12 @@ LOGOUT_REDIRECT_URL = "index"
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes'   ,
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -122,6 +123,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = BASE_DIR/"app/media"
+MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR/"app/media"
 # MEDIA_URL = '/media/'
 # Default primary key field type
