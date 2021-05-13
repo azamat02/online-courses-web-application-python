@@ -97,3 +97,38 @@ def search_success(request, text):
         search_res = Courses.objects.filter(course_name_contains=text)
         return render(request, "app/search.html",
                       {"search_res": search_res, "empty_res": "There is no article"})
+
+@api_view(['GET', 'POST'])
+def api_courses_list(request, format=None):
+
+    if request.method == 'GET':
+        courses = Courses.objects.all()
+
+        serializer = CourseSerializer(courses, many=True)
+
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = CourseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def api_comment_list(request, format=None):
+
+    if request.method == 'GET':
+        comment = Comment.objects.all()
+
+        serializer = CommentSerializer(comment, many=True)
+
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
