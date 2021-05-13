@@ -109,7 +109,7 @@ def api_courses_list(request, format=None):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = CourseSerializer(data=request.data)
+        serializer = CourseSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -126,7 +126,7 @@ def api_comment_list(request, format=None):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = CommentSerializer(data=request.data)
+        serializer = CommentSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
