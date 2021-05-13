@@ -1,6 +1,6 @@
 from datetime import timezone
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
@@ -65,10 +65,11 @@ def rate_course(request, id):
         if request.POST.get("rate_val"):
             print(type(request.POST.get("rate_val")))
             course_obj = Courses.objects.get(pk=id)
-            course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
-            course_obj.counter_rating = course_obj.counter_rating + 1;
+            # course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
+            # course_obj.counter_rating = course_obj.counter_rating + 1;
+            course_obj.rating = course_obj.rating + float(request.POST.get("rate_val"))
             course_obj.save()
-            return redirect("app:get_course", pk=id)
+            return redirect("get_course", pk=id)
         else:
             return render(request, "app/search.html", {"empty_res": "There is no course"})
 
@@ -132,3 +133,20 @@ def api_comment_list(request, format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET', 'PUT', 'DELETE'])
+def api_comment_details(request, id, format=None):
+
+    cmt = get_object_or_404(Comment, pk=id)
+
+    if request.method == 'GET':
+        serializer = CommentSerializer(cmt)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = CommentSerializer(cmt, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        cmt.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
