@@ -13,14 +13,15 @@ class Courses(models.Model):
     course_name = models.CharField(max_length=1000)
     course_description = models.TextField('description')
     course_date = models.DateTimeField('date created', auto_now_add=True)
-    rating = models.FloatField(default=0.0)
+    sum_rating = models.FloatField(default=0.0)
+    count_rating = models.FloatField(default=0.0)
     course_requirements = models.TextField('requirements')
 
     def __str__(self):
         return self.course_name
 
     def get_rating(self):
-        return self.rating
+        return self.sum_rating / self.count_rating
 
 class Comment(models.Model):
     comment_text = models.TextField('comment_text')

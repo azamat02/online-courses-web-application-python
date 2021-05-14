@@ -56,7 +56,7 @@ def leave_comment(request, id):
                                       comment_on_course=Courses.objects.get(pk=id),
                                       comment_user=SimpleUser.objects.get(pk=request.user.id))
         comment_object.save()
-        return redirect("app:get_course", pk=id)
+        return redirect("get_course", pk=id)
     else:
         return render(request, "app/search.html", {"empty_res": "There is no course"})
 
@@ -65,9 +65,8 @@ def rate_course(request, id):
         if request.POST.get("rate_val"):
             print(type(request.POST.get("rate_val")))
             course_obj = Courses.objects.get(pk=id)
-            # course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
-            # course_obj.counter_rating = course_obj.counter_rating + 1;
-            course_obj.rating = course_obj.rating + float(request.POST.get("rate_val"))
+            course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
+            course_obj.counter_rating = course_obj.counter_rating + 1;
             course_obj.save()
             return redirect("get_course", pk=id)
         else:
@@ -88,7 +87,7 @@ class ChangeView(TemplateView):
 def search_by_course_text(request):
     if request.method == "POST" and len(request.POST.get("search_field")) > 0:
         searching_text = request.POST.get("search_field")
-        return redirect("app:search_success", text=searching_text)
+        return redirect("search_success", text=searching_text)
     else:
         return render(request, "app/search.html",
                       {"empty_res": "There is no article"})
