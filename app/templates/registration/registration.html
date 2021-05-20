@@ -1,11 +1,20 @@
-{%block content%}
-  <br>
-   <h2>Sign up</h2>
-   <form method="post" enctype="multipart/form-data">
-     {% csrf_token %}
-     {{ form.as_p}}
-     <button type="submit">Sign up</button>
-   </form>
+{% extends "registration/base.html" %}
+{% block title %}Log-in{% endblock %}
+{% load static %}
+{% block base_head %}
+    <link href="{% static 'app/css/bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
 
-   <br><br>
+{% block content %}
+    <br>
+    <h1>Register</h1>
+    <form method="POST">
+        {% csrf_token %} <!--- To protect form---->
+        {{form.as_p}} <!--- Django ready form---->
+        <!--- .as_p shfaq formen si paragraf tekst <p></p>---->
+        <button class="btn btn-outline-info" type="submit">Sign Up</button>
+        <!-- Shtojme Butonin Submit sepse Django nuk e paska te perfshire.  class="btn" Nga Framework i Materialize-->
+    </form>
+
+    If you already have an account, <a href="{% url 'login' %}"><strong>login</strong></a> instead.
 {% endblock %}

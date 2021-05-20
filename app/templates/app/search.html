@@ -1,0 +1,14 @@
+  {% if search_res %}
+    {% for course in search_res %}
+    <div class="row">
+        <div class="col-md-3 portfolio-item">
+            <h3>
+                <a href="{% url 'get_course_by_id' course.id%}">{{course.course_name}}</a>
+            </h3>
+            <p>{{course.course_description|truncatewords:10}}</p>
+        </div>
+    </div>
+        {% endfor %}
+    {% else %}
+      {{empty_res}}
+    {% endif %}
