@@ -5,8 +5,9 @@ from django.http import HttpRequest
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from .forms import *
+from .permissions import IsStaffOrNot
 from .serializers import *
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view # making sure to receive Request, add context to Response
 from rest_framework.response import Response # is needed to return client defined response
 
@@ -98,54 +99,42 @@ def search_success(request, text):
         return render(request, "app/search.html",
                       {"search_res": search_res, "empty_res": "There is no article"})
 
-@api_view(['GET', 'POST'])
-def api_courses_list(request, format=None):
+class CoursesListAPI(generics.ListCreateAPIView):
 
-    if request.method == 'GET':
-        courses = Courses.objects.all()
+    queryset = Courses.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
 
-        serializer = CourseSerializer(courses, many=True)
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(generics.ListCreateAPIView, self).get_serializer(*args, **kwargs)
 
-        return Response(serializer.data)
+class CommentsListAPI(generics.ListCreateAPIView):
 
-    elif request.method == 'POST':
-        serializer = CourseSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
 
-@api_view(['GET', 'POST'])
-def api_comment_list(request, format=None):
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(generics.ListCreateAPIView, self).get_serializer(*args, **kwargs)
 
-    if request.method == 'GET':
-        comment = Comment.objects.all()
+class CommentDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
 
-        serializer = CommentSerializer(comment, many=True)
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
 
-        return Response(serializer.data)
+    def get_serializer(self, *args, **kwargs):
+        kwargs['partial'] = True
+        return super(generics.RetrieveUpdateDestroyAPIView, self).get_serializer(*args, **kwargs)
 
-    elif request.method == 'POST':
-        serializer = CommentSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UsersListAPI(generics.ListAPIView):
+    queryset = SimpleUser.objects.all()
+    serializer_class = SimpleUserSerializer
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def api_comment_details(request, id, format=None):
-
-    cmt = get_object_or_404(Comment, pk=id)
-
-    if request.method == 'GET':
-        serializer = CommentSerializer(cmt)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        serializer = CommentSerializer(cmt, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        cmt.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class UserDetailsAPI(generics.RetrieveAPIView):
+    queryset = SimpleUser.objects.all()
+    serializer_class = SimpleUserSerializer
