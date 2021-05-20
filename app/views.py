@@ -5,8 +5,9 @@ from django.http import HttpRequest
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from .forms import *
+from .permissions import IsStaffOrNot
 from .serializers import *
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view  # making sure to receive Request, add context to Response
 from rest_framework.response import Response  # is needed to return client defined response
 
@@ -71,10 +72,11 @@ def rate_course(request, id):
         if request.POST.get("rate_val"):
             print(type(request.POST.get("rate_val")))
             course_obj = Courses.objects.get(pk=id)
-            course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
-            course_obj.counter_rating = course_obj.counter_rating + 1;
+            # course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
+            # course_obj.counter_rating = course_obj.counter_rating + 1;
+            course_obj.rating = course_obj.rating + float(request.POST.get("rate_val"))
             course_obj.save()
-            return redirect("app:get_course", pk=id)
+            return redirect("get_course", pk=id)
         else:
             return render(request, "app/search.html", {"empty_res": "There is no course"})
 
@@ -111,56 +113,43 @@ def search_success(request, text):
                       {"search_res": search_res, "empty_res": "There is no article"})
 
 
-@api_view(['GET', 'POST'])
-def api_courses_list(request, format=None):
-    if request.method == 'GET':
-        courses = Courses.objects.all()
+class CoursesListAPI(generics.ListCreateAPIView):
+    queryset = Courses.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
 
-        serializer = CourseSerializer(courses, many=True)
-
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = CourseSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(generics.ListCreateAPIView, self).get_serializer(*args, **kwargs)
 
 
-@api_view(['GET', 'POST'])
-def api_comment_list(request, format=None):
-    if request.method == 'GET':
-        comment = Comment.objects.all()
+class CommentsListAPI(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
 
-        serializer = CommentSerializer(comment, many=True)
-
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = CommentSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(generics.ListCreateAPIView, self).get_serializer(*args, **kwargs)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def api_comment_details(request, id, format=None):
+class CommentDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
 
-    cmt = get_object_or_404(Comment, pk=id)
+    def get_serializer(self, *args, **kwargs):
+        kwargs['partial'] = True
+        return super(generics.RetrieveUpdateDestroyAPIView, self).get_serializer(*args, **kwargs)
 
-    if request.method == 'GET':
-        serializer = CommentSerializer(cmt)
-        return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        serializer = CommentSerializer(cmt, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UsersListAPI(generics.ListAPIView):
+    queryset = SimpleUser.objects.all()
+    serializer_class = SimpleUserSerializer
 
-    elif request.method == 'DELETE':
-        cmt.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)  # 204 code for No Content
+
+class UserDetailsAPI(generics.RetrieveAPIView):
+    queryset = SimpleUser.objects.all()
+    serializer_class = SimpleUserSerializer

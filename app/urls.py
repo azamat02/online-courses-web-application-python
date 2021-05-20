@@ -5,9 +5,9 @@ from . import views
 from .views import *
 
 urlpatterns = [
-    path('api/courses/all/', api_courses_list, name='api-articles-list'),
-    path('api/comments/all/', api_comment_list, name='api-comment-list'),
-    path('api/comments/comment/<int:id>/', api_comment_details, name='api-comment-details'),
+    path('api/courses/all/', CoursesListAPI.as_view(), name='api-courses-list'),
+    path('api/comments/all', CommentsListAPI.as_view(), name='api-comment-details'),
+    path('api/comments/comment/<int:id>/', CommentDetailsAPI.as_view(), name='api-comment-details'),
     path('', views.index, name='index'),
     path("register/", registerView.as_view(), name="registration"),
     path('', auth_login, name="login"),
