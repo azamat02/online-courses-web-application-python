@@ -1,0 +1,31 @@
+<h2>{{ courses.course_name }}</h2>
+
+{%if user.is_authenticated%}
+  Rate course from 1 to 5:
+  <form class="" action="{% url 'rate_course' courses.id %}" method="post">
+    {% csrf_token %}
+    {% for i in '12345'|make_list %}
+    <input type="radio" name="rate_val" value="{{forloop.counter}}">
+    {%endfor%}
+    <input type="submit" name="" value="Rate">
+  </form>
+  <br>
+  <h3>Comments: </h3>
+  {% if comments_of_course %}
+  {% for comment in comments_of_course %}
+  <ul>
+    <li><b>*{{comment.comment_user.username}}* left this comment</b></li>
+    <p>{{comment.comment_text}}</p>
+  </ul>
+
+  {% endfor %}
+  {% else %}
+    <p>No comments on this article yet</p>
+  {% endif %}
+
+  <form class="" action="{% url 'leave_comment' courses.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="comment_text" rows="8" cols="80" placeholder="Leave your thoughts" required></textarea>
+    <br><input type="submit" name="" value="Submit">
+  </form>
+    {%endif%}
