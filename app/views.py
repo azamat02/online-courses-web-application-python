@@ -11,8 +11,10 @@ from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view # making sure to receive Request, add context to Response
 from rest_framework.response import Response # is needed to return client defined response
 
-def index(request):
-    return render(request, "app/index.html")
+class IndexView(ListView):
+    template_name = "app/index.html"
+    context_object_name = "latest_courses"
+    queryset = Courses.objects.order_by('course_name')
 
 class registerView(CreateView):
     form_class = SimpleUserForm
@@ -57,7 +59,7 @@ def leave_comment(request, id):
                                       comment_on_course=Courses.objects.get(pk=id),
                                       comment_user=SimpleUser.objects.get(pk=request.user.id))
         comment_object.save()
-        return redirect("get_course", pk=id)
+        return redirect("get_course_by_id", pk=id)
     else:
         return render(request, "app/search.html", {"empty_res": "There is no course"})
 
@@ -67,9 +69,9 @@ def rate_course(request, id):
             print(type(request.POST.get("rate_val")))
             course_obj = Courses.objects.get(pk=id)
             course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
-            course_obj.counter_rating = course_obj.counter_rating + 1;
+            course_obj.count_rating = course_obj.count_rating + 1;
             course_obj.save()
-            return redirect("get_course", pk=id)
+            return redirect("get_course_by_id", pk=id)
         else:
             return render(request, "app/search.html", {"empty_res": "There is no course"})
 

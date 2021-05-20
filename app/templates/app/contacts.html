@@ -1,0 +1,48 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+    <ul>
+        <br>
+        <h2><li>
+            Contacts</li></h2>
+        <h4><li>Rector`s Office: +7 (7172) 645732</li>
+
+            <li>Selection committee: </li>
+            <ol>
+                <li>+7 705 291 00 77</li>
+                <li>+7 (7172) 645711</li>
+                <li>+7 (7172) 645712</li>
+                <li>+7 (7172) 645713</li>
+            </ol>
+            <li>E-mail: info@astanait.edu.kz</li>
+            <li>E-mail: admission@astanait.edu.kz</li>
+        </h4>
+    </ul>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 300px;  /* The height is 400 pixels */
+            width: 50%;  /* The width is the width of the web page */
+        }
+    </style>
+    <h3>Our Geolocation</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+        // Initialize and add the map
+
+        function initMap() {
+            // The location of Uluru
+            var uluru = {lat: 51.090963716410876,  lng: 71.41831217645621};
+            // The map, centered at Uluru
+            var map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 18, center: uluru});
+            // The marker, positioned at Uluru
+            var marker = new google.maps.Marker({position: uluru, map: map});
+            var marker2 = new google.maps.Marker({position: {lat:45, lng: 80}, map: map});
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnSarQ-Gb0iv3LFoHwJL3iYAduo1hI_Uc&callback=initMap">
+    </script>
+{% endblock %}
