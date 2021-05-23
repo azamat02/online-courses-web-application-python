@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import timezone, datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
@@ -32,6 +32,13 @@ class GetCourseByID(DetailView):
         crs_obj.save()
         return context
 
+    def get_modules(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['modules_of_course'] = Module.objects.filter(module_of_course=self.object.id)
+        crs_obj = self.get_object()
+        crs_obj.save()
+        return context
+
 class AllCourses(ListView):
     template_name = 'app/all_course.html'
     context_object_name = 'all_course'
@@ -46,11 +53,16 @@ def my_courses(request):
 
 def purchase_courses(request, id):
     if request.method == 'POST':
-        purchase_object = Purchased_Courses(pc_date=timezone.now(),
-                                            pc_user=request.user.id,
-                                            pc_course=id)
-        purchase_object.save()
-        return redirect("home")
+        course = Courses.objects.get(pk=id)
+        try:
+            Purchased_Courses.objects.get(pc_user=request.user,
+                                          pc_course=course)
+        except:
+            purchase_object = Purchased_Courses(pc_user=request.user,
+                                                pc_course=course)
+            purchase_object.save()
+
+        return redirect("index")
 
 def leave_comment(request, id):
     if request.method == 'POST' and len(request.POST.get("comment_text")) > 0:
