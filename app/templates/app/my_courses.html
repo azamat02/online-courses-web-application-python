@@ -1,0 +1,102 @@
+{% extends "app/layout.html" %}
+{% load static %}
+<link href="{% static 'app/css/course.pc_course.css' %}" rel="stylesheet">
+{% block content %}
+    <style>
+        .container .course_section{
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            grid-column-gap: 50px;
+        }
+        .card {
+            border: none;
+            box-shadow: 5px 6px 6px 2px #e9ecef;
+            border-radius: 4px
+        }
+
+        .icons i {
+            margin-left: 8px
+        }
+
+        .reply small {
+            color: #b7b4b4
+        }
+
+        .reply small:hover {
+            color: green;
+            cursor: pointer;
+        }
+        .opinion_submit{
+            background-color:#3A7CA5;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .course_name{
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 32px;
+            font-feature-settings: 'liga' off;
+            color: #FFFFFF;
+        }
+        .course_description{
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 26px;
+            font-feature-settings: 'liga' off;
+            color: #FFFFFF;
+        }
+        .rating{
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 12px;
+            line-height: 16px;
+            /* identical to box height, or 133% */
+
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            color: #3A7CA5;
+        }
+        .rate{
+            background-color:#FFFFFF;
+            border: none;
+            color: #3A7CA5;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+    {%if user.is_authenticated%}
+        {% if result %}
+            {% for course in result %}
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{course.pc_course.course_name}}</h5>
+                            <p class="card-text">{{course.pc_course.course_description|truncatewords:10}}</p>
+                            <a class="button-highlight buy-course-button" href="{% url 'get_course_by_id' course.pc_course.id%}">Show Course</a>
+                        </div>
+                        <div class="card-item d-flex justify-content-around">
+                            <div class="text d-flex justify-content-start align-items-center">
+                                <p>{{course.pc_course.course_date}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+        {% else %}
+            {{empty_result}}
+        {% endif %}
+    {% endif %}
+{%endblock%}
+

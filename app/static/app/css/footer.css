@@ -4,7 +4,7 @@ footer {
     margin-top: 50px;
     grid-template-columns: repeat(auto-fit, 350px);
     justify-content: space-between;
-    height: 300px;
+    height: auto;
     grid-gap: 40px;
     background-color: #DFD6D6;
     padding: 0px 180px 0px 180px;

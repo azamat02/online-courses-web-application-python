@@ -11,6 +11,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path("register/", registerView.as_view(), name="registration"),
     path('', auth_login, name="login"),
+    path('course/<int:id>/purchase', purchase_courses, name="purchase"),
     path('course/<int:pk>/', GetCourseByID.as_view(), name='get_course_by_id'),
     path('course/<int:id>/rate', rate_course, name='rate_course'),
     path('course/<int:id>/leaving_comment', leave_comment, name='leave_comment'),
@@ -18,8 +19,6 @@ urlpatterns = [
     path('aboutUs', AboutView.as_view(), name="aboutUs"),
     path("course/id", GetCourseByID, name="courseID"),
     path("contactUs", ContactsView.as_view(), name="contactUs"),
-    path('search/', search_by_course_text, name='search_by_course_text'),
-    path('search/<str:text>/', search_success, name='search_success'),
     path("my_curses/", my_courses, name="my_curses"),
     path("user/<username>", ProfileView.as_view(), name="profile"),
 ]

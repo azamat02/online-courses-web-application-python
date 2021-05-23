@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import timezone, datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
@@ -8,18 +8,21 @@ from .forms import *
 from .permissions import IsStaffOrNot
 from .serializers import *
 from rest_framework import status, generics, permissions
-from rest_framework.decorators import api_view # making sure to receive Request, add context to Response
-from rest_framework.response import Response # is needed to return client defined response
+from rest_framework.decorators import api_view  # making sure to receive Request, add context to Response
+from rest_framework.response import Response  # is needed to return client defined response
+
 
 class IndexView(ListView):
     template_name = "app/index.html"
     context_object_name = "latest_courses"
     queryset = Courses.objects.order_by('course_name')
 
+
 class registerView(CreateView):
     form_class = SimpleUserForm
     success_url = reverse_lazy('login')
     template_name = 'registration/registration.html'
+
 
 class GetCourseByID(DetailView):
     model = Courses
@@ -31,6 +34,14 @@ class GetCourseByID(DetailView):
         crs_obj = self.get_object()
         crs_obj.save()
         return context
+
+    def get_modules(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['modules_of_course'] = Module.objects.filter(module_of_course=self.object.id)
+        crs_obj = self.get_object()
+        crs_obj.save()
+        return context
+
 
 class AllCourses(ListView):
     template_name = 'app/all_course.html'
@@ -46,22 +57,29 @@ def my_courses(request):
 
 def purchase_courses(request, id):
     if request.method == 'POST':
-        purchase_object = Purchased_Courses(pc_date=timezone.now(),
-                                            pc_user=request.user.id,
-                                            pc_course=id)
-        purchase_object.save()
-        return redirect("app:home")
+        course = Courses.objects.get(pk=id)
+        try:
+            Purchased_Courses.objects.get(pc_user=request.user,
+                                          pc_course=course)
+        except:
+            purchase_object = Purchased_Courses(pc_user=request.user,
+                                                pc_course=course)
+            purchase_object.save()
+
+        return redirect("index")
+
 
 def leave_comment(request, id):
     if request.method == 'POST' and len(request.POST.get("comment_text")) > 0:
         print(request.POST.get("comment_text"), type(request.POST.get("comment_text")), type(request.user.id))
         comment_object = Comment(comment_text=request.POST.get("comment_text"),
-                                      comment_on_course=Courses.objects.get(pk=id),
-                                      comment_user=SimpleUser.objects.get(pk=request.user.id))
+                                 comment_on_course=Courses.objects.get(pk=id),
+                                 comment_user=SimpleUser.objects.get(pk=request.user.id))
         comment_object.save()
         return redirect("get_course_by_id", pk=id)
     else:
         return render(request, "app/search.html", {"empty_res": "There is no course"})
+
 
 def rate_course(request, id):
     if request.method == 'POST':
@@ -75,17 +93,22 @@ def rate_course(request, id):
         else:
             return render(request, "app/search.html", {"empty_res": "There is no course"})
 
+
 class ContactsView(TemplateView):
     template_name = "app/contacts.html"
+
 
 class AboutView(TemplateView):
     template_name = "app/about.html"
 
+
 class ProfileView(TemplateView):
     template_name = "registration/user_page.html"
 
+
 class ChangeView(TemplateView):
     template_name = "register/change_user.html"
+
 
 def search_by_course_text(request):
     if request.method == "POST" and len(request.POST.get("search_field")) > 0:
@@ -95,15 +118,15 @@ def search_by_course_text(request):
         return render(request, "app/search.html",
                       {"empty_res": "There is no article"})
 
+
 def search_success(request, text):
     if len(text) > 0:
-        search_res = Courses.objects.filter(course_name__contains=text)
-        print(search_res)
+        search_res = Courses.objects.filter(course_name_contains=text)
         return render(request, "app/search.html",
                       {"search_res": search_res, "empty_res": "There is no article"})
 
-class CoursesListAPI(generics.ListCreateAPIView):
 
+class CoursesListAPI(generics.ListCreateAPIView):
     queryset = Courses.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
@@ -113,8 +136,8 @@ class CoursesListAPI(generics.ListCreateAPIView):
             kwargs['many'] = True
         return super(generics.ListCreateAPIView, self).get_serializer(*args, **kwargs)
 
-class CommentsListAPI(generics.ListCreateAPIView):
 
+class CommentsListAPI(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
@@ -124,8 +147,8 @@ class CommentsListAPI(generics.ListCreateAPIView):
             kwargs['many'] = True
         return super(generics.ListCreateAPIView, self).get_serializer(*args, **kwargs)
 
-class CommentDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
 
+class CommentDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated, IsStaffOrNot]
@@ -134,9 +157,11 @@ class CommentDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
         kwargs['partial'] = True
         return super(generics.RetrieveUpdateDestroyAPIView, self).get_serializer(*args, **kwargs)
 
+
 class UsersListAPI(generics.ListAPIView):
     queryset = SimpleUser.objects.all()
     serializer_class = SimpleUserSerializer
+
 
 class UserDetailsAPI(generics.RetrieveAPIView):
     queryset = SimpleUser.objects.all()
