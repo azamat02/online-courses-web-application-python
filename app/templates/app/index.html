@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Courses</title>
     {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'app/img/ICON/favicon.png' %}" type="image/x-icon">
     <link href="{% static 'app/css/auth.css' %}" rel="stylesheet">
     <link href="{% static 'app/css/courses.css' %}" rel="stylesheet">
     <link href="{% static 'app/css/footer.css' %}" rel="stylesheet">
     <link href="{% static 'app/css/main.css' %}" rel="stylesheet">
     <link href="{% static 'app/css/navbar.css' %}" rel="stylesheet">
-    <link href="{% static 'app/css/slider.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/style.css' %}" rel="stylesheet">
 </head>
 <body>
     <!-- Navbar -->
@@ -19,8 +25,8 @@
         <ul class="nav-links">
             <a href="/" class="logo">
                 <span>
-                    ONLINE COURSES    
-                </span>    
+                    ONLINE COURSES
+                </span>
             </a>
             <li class="nav-item active"><a href="/">Main page</a></li>
             <li class="nav-item"><a href="{% url 'contactUs' %}">Contacts</a></li>
@@ -43,129 +49,103 @@
     </nav>
 
     <main>
-
-        {% if latest_courses %}
-        <!-- thymeleaf -->
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Courses
-                    <small color="red">LATEST</small>
-                </h1>
-            </div>
-        </div>
-        {% for course in latest_courses %}
-        <div class="row">
-            <div class="col-md-3 portfolio-item">
-                <h3>
-                    <a href="{% url 'get_course_by_id' course.id%}">{{course.course_name}}</a>
-                </h3>
-                <p>{{course.course_description|truncatewords:10}}</p>
-            </div>
-            {% endfor %}
-            {% else %}
-              <p> "No available courses" </p>
-            {% endif %}
-
-        <div class="slider-container">
-            <div class="slider-image">
-                <img class="course-img" src="" alt=""/>
-            </div>
-            <div class="slider-content">
-                <div class="indicators">
-                    <div class="indicator-dots">
-                          <span class="active-dot"></span>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                    </div>
-                    <div class="indicator-controllers">
-                        <span><i class="fas fa-arrow-left"></i></span>
-                        <span><i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-                <p class="course-title">
-                    Course #1
-                </p>
-                <p class="course-desc">
-                    Course Desc
-                </p>
-                <button class="course-button">Подробнее</button>
-            </div>
-        </div>
-
-        <!-- Courses list -->
-        
-        <p class="title">Courses</p>
-            <div class="courses-list">
-                <div class="course-card-item">
-                    <div class="course-card-image">
-                        image
-                    </div>
-                    <div class="course-card-content">
-                        <p class="course-card-label">Course</p>
-                        <p class="course-card-title">
-                            Course title
-                        </p>
-                        <div class="course-card-desc">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-book" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#38393A" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" />
-                                <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" />
-                                <line x1="3" y1="6" x2="3" y2="19" />
-                                <line x1="12" y1="6" x2="12" y2="19" />
-                                <line x1="21" y1="6" x2="21" y2="19" />
-                            </svg>
-                            <span>
-                                30 lessons
-                            </span>
-                        </div>
-                        <p class="course-card-link">
-                            <a href="" class="course-card-link">Read more</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </p>
-
-        <!----start-banner---->
-        <div class="banner text-center"></div>
-        <!----end-banner---->
-
-        <!----start-content---->
-        <div class="featured_content" id="feature">
+        <section class="banner-part">
             <div class="container">
-                <div class="row text-center">
-
-                    <div class="col-md-3 feature_grid1">
-                        <i class="icon1"> </i>
-                        <h3 class="m_1"><a href="#">Video Lectures</a></h3>
-                        <p class="m_2">Learn anything by watching educational videos!</p>
+                <div class="row align-items-center">
+                    <div class="col-md-4 col-lg-4">
+                        <h6 class="red-highlight">Are you ready to Learn?</h6>
+                        <h1>Learn With fun on <span class="blue-bg">any schedule</span></h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius blandit facilisis quam netus.</p>
+                        <a class="button-highlight" href="{% url 'login' %}">Get Started</a>
                     </div>
-
-                    <div class="col-md-3 feature_grid1">
-                        <i class="icon2"> </i>
-                        <h3 class="m_1"><a href="#">Research</a></h3>
-                        <p class="m_2">Make experiments with lectures and discuss it on forums!</p>
+                    <div class="col-md-8 col-lg-8 img-right">
+                        <img class="img-fluid" src="{% static 'app/img/Photos/Illustration.png' %}" alt="">
                     </div>
-
-                    <div class="col-md-3 feature_grid1">
-                        <i class="icon3"> </i>
-                        <h3 class="m_1"><a href="#">Solutions</a></h3>
-                        <p class="m_2">Improve this website by sharing better solutions!</p>
-                    </div>
-
-                    <div class="col-md-3 feature_grid1">
-                        <i class="icon4"> </i>
-                        <h3 class="m_1"><a href="#">Activism</a></h3>
-                        <p class="m_2">Get involved with our website by sharing this website!</p>
-                    </div>
-
                 </div>
             </div>
-        </div>
-
-        <hr/>
-        </div>
+        </section>
+        <!-- Banner part ends -->
+        <section class="categories">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="cat-item">
+                            <img class="img-fluid" src="{% static 'app/img/ICON/book.png' %}" alt="">
+                            <h3>1500+ Topic</h3>
+                            <p>Learn Anythings</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="cat-item">
+                            <img class="img-fluid" src="{% static 'app/img/ICON/Student.png' %}" alt="">
+                            <h3>1800+ Students</h3>
+                            <p>Learn Anythings</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="cat-item">
+                            <img class="img-fluid" src="{% static 'app/img/ICON/Students.png' %}" alt="">
+                            <h3>9K+ Test Token</h3>
+                            <p>Learn Anythings</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="cat-item">
+                            <img class="img-fluid" src="{% static 'app/img/ICON/Test.png' %}" alt="">
+                            <h3>2000+ Student</h3>
+                            <p>Learn Anythings</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- catagories part ends -->
+        <section class="course-section">
+            <div class="text">
+                <h2>Online Courses</h2>
+            </div>
+            <div class="container course-content">
+                {% if latest_courses %}
+                <div class="card-deck row">
+                    {% for course in latest_courses %}
+                    <div class="col-sm-12 col-md-4 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{course.course_name}}</h5>
+                                <p class="card-text">{{course.course_description|truncatewords:10}}</p>
+                                <a class="button-highlight buy-course-button" href="{% url 'get_course_by_id' course.id%}">Show Course</a>
+                            </div>
+                            <div class="card-item d-flex justify-content-around">
+                                <div class="text d-flex justify-content-start align-items-center">
+                                    <img src="{% static 'app/img/ICON/calendar.png' %}" alt="">
+                                    <p>{{course.course_date}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p> "No available courses" </p>
+                {% endif %}
+                </div>
+            </div>
+        </section>
+        <!-- course section ends -->
+        <section id="testimonial">
+            <div class="text">
+                <h2>Testimonial</h2>
+            </div>
+            <div class="container test-area">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 text-item d-flex justify-content-center align-items-center">
+                        <img src="{% static 'app/img/Photos/Man.png' %}" alt="">
+                        <p class="text-blog">There are many variations of passages of Lorem Ipsum available, but the
+                            majority have suffered alteration in some form, by injected humour,
+                            or randomised words which don't look even slightly believable.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     <!-- Footer -->
     <footer>

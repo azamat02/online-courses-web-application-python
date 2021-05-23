@@ -1,6 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Courses</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'app/img/ICON/favicon.png' %}" type="image/x-icon">
+    <link href="{% static 'app/css/auth.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/courses.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/footer.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/navbar.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/about.css' %}" rel="stylesheet">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar">
+    <ul class="nav-links">
+        <a href="/" class="logo">
+                <span>
+                    ONLINE COURSES
+                </span>
+        </a>
+        <li class="nav-item active"><a href="/">Main page</a></li>
+        <li class="nav-item"><a href="{% url 'contactUs' %}">Contacts</a></li>
+        <li class="nav-item"><a href="/">Help</a></li>
+        <li class="nav-item"><a href="{% url 'aboutUs' %}">About US</a></li>
+    </ul>
+    {%block login%}
+        {% if user.is_authenticated%}
+            <ul class="nav-links">
+                <li class="nav-item colored"><a href="{% url 'logout' %}">log out</a></li>
+                <li class="nav-item button"><a href="{% url 'profile' user.username%}">{{user.username}}</a></li>
+            </ul>
+        {%else%}
+            <ul class="nav-links">
+                <li class="nav-item colored"><a href="{% url 'login' %}">Sign in</a></li>
+                <li class="nav-item button"><a href="{% url 'registration' %}">Sign up</a></li>
+            </ul>
+        {%endif%}
+    {%endblock%}
+</nav>
+<div class="about">
+    <div class="inner-section">
+        <h1>About Us</h1>
+        <p class="text">
+            Coursera was founded by Daphne Koller and Andrew Ng in 2012 with a vision of providing life-transforming learning experiences to learners around the world. Today, Coursera is a global online learning platform that offers anyone, anywhere, access to online courses and degrees from leading universities and companies.
 
-
-<!-- Footer -->
+            77 million learners, 100+ Fortune 500 companies, and more than 6,000 campuses, businesses, and governments come to Coursera to access world-class learning—anytime, anywhere.
+        </p>
+        <div class="skills">
+            <button>Contact Us</button>
+        </div>
+        <h1 style="padding-top: 10px">BENEFITS OF JOINING</h1>
+        <p class="text" >
+            After completing all modules, an instructor will evaluate your projects
+            and give you honest feedback as well as a final grade. Should you pass all
+            the criterias successfully, you will be given a certificate equivalent to
+            a level 3 degree that you can add to your portfolio. Each course should
+            have an average of 3 projects to complete, quite similar to what you would
+            find in real life work environment, making them perfect to give you real
+            experience.
+        </p>
+    </div>
+</div>
 <footer>
     <div class="footer-part-one">
         <p class="title">
@@ -34,5 +103,14 @@
         </a>
     </div>
 </footer>
+<!-- jQuery -->
+<script src="{% static 'app/js/jquery-1.11.3.min.js'%}"></script>
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="{% static 'app/js/bootstrap.min.js'%}"></script>
+
 </body>
+
+</html>
 </html>

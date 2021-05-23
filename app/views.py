@@ -50,7 +50,7 @@ def purchase_courses(request, id):
                                             pc_user=request.user.id,
                                             pc_course=id)
         purchase_object.save()
-        return redirect("app:home")
+        return redirect("home")
 
 def leave_comment(request, id):
     if request.method == 'POST' and len(request.POST.get("comment_text")) > 0:
