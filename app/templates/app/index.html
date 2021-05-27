@@ -50,7 +50,11 @@
         {%endif%}
         {%endblock%}
     </nav>
-
+    <form class="" action="{%url 'search_by_course_text' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="search_field" value="" method='POST' placeholder="Search here" required>
+        <input type="submit" name="Search" value="Search">
+    </form>
     <main>
         <section class="banner-part">
             <div class="container">

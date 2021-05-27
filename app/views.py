@@ -31,12 +31,6 @@ class GetCourseByID(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comments_of_course'] = Comment.objects.filter(comment_on_course=self.object.id)
-        crs_obj = self.get_object()
-        crs_obj.save()
-        return context
-
-    def get_modules(self, **kwargs):
-        context = super().get_context_data(**kwargs)
         context['modules_of_course'] = Module.objects.filter(module_of_course=self.object.id)
         crs_obj = self.get_object()
         crs_obj.save()
@@ -55,6 +49,16 @@ def my_courses(request):
                   {"result": result, "empty_result": "There is no courses"})
 
 
+def videos_of_module(request, id):
+    id2 = Module.objects.get(pk=id).module_of_course.id
+    if check_for_purchased(request, id2):
+        result = Videos.objects.filter(video_of_module=Module.objects.get(pk=id))
+        return render(request, "app/modules.html",
+                      {"result": result, "empty_result": "There is no videos"})
+    else:
+        return render(request, "app/search.html", {"empty_res": "You didnt purchased this course"})
+
+
 def purchase_courses(request, id):
     if request.method == 'POST':
         course = Courses.objects.get(pk=id)
@@ -69,29 +73,45 @@ def purchase_courses(request, id):
         return redirect("index")
 
 
+def check_for_purchased(request, id):
+    check = True
+    try:
+        Purchased_Courses.objects.get(pc_user=request.user.id,
+                                      pc_course=Courses.objects.get(pk=id))
+    except:
+        check = False
+    return check
+
+
 def leave_comment(request, id):
-    if request.method == 'POST' and len(request.POST.get("comment_text")) > 0:
-        print(request.POST.get("comment_text"), type(request.POST.get("comment_text")), type(request.user.id))
-        comment_object = Comment(comment_text=request.POST.get("comment_text"),
-                                 comment_on_course=Courses.objects.get(pk=id),
-                                 comment_user=SimpleUser.objects.get(pk=request.user.id))
-        comment_object.save()
-        return redirect("get_course_by_id", pk=id)
-    else:
-        return render(request, "app/search.html", {"empty_res": "There is no course"})
-
-
-def rate_course(request, id):
-    if request.method == 'POST':
-        if request.POST.get("rate_val"):
-            print(type(request.POST.get("rate_val")))
-            course_obj = Courses.objects.get(pk=id)
-            course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
-            course_obj.count_rating = course_obj.count_rating + 1;
-            course_obj.save()
+    if check_for_purchased(request, id):
+        if request.method == 'POST' and len(request.POST.get("comment_text")) > 0:
+            print(request.POST.get("comment_text"), type(request.POST.get("comment_text")), type(request.user.id))
+            comment_object = Comment(comment_text=request.POST.get("comment_text"),
+                                     comment_on_course=Courses.objects.get(pk=id),
+                                     comment_user=SimpleUser.objects.get(pk=request.user.id))
+            comment_object.save()
             return redirect("get_course_by_id", pk=id)
         else:
             return render(request, "app/search.html", {"empty_res": "There is no course"})
+    else:
+        return render(request, "app/search.html", {"empty_res": "You didnt purchased this course"})
+
+
+def rate_course(request, id):
+    if check_for_purchased(request, id):
+        if request.method == 'POST':
+            if request.POST.get("rate_val"):
+                print(type(request.POST.get("rate_val")))
+                course_obj = Courses.objects.get(pk=id)
+                course_obj.sum_rating = course_obj.sum_rating + float(request.POST.get("rate_val"))
+                course_obj.count_rating = course_obj.count_rating + 1;
+                course_obj.save()
+                return redirect("get_course_by_id", pk=id)
+            else:
+                return render(request, "app/search.html", {"empty_res": "There is no course"})
+    else:
+        return render(request, "app/search.html", {"empty_res": "You didnt purchased this course"})
 
 
 class ContactsView(TemplateView):
@@ -121,7 +141,7 @@ def search_by_course_text(request):
 
 def search_success(request, text):
     if len(text) > 0:
-        search_res = Courses.objects.filter(course_name_contains=text)
+        search_res = Courses.objects.filter(course_name__contains=text)
         return render(request, "app/search.html",
                       {"search_res": search_res, "empty_res": "There is no article"})
 

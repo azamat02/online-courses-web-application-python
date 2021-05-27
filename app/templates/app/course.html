@@ -90,6 +90,7 @@
                     <h2 class="course_name">{{ courses.course_name }}</h2>
                     <p class="course_description">
                         {{ courses.course_description }}
+                        {{ courses.get_rating }}
                     </p>
                     <div style="width:300px;height:auto; background-color: white;border: 1px solid rgba(24, 25, 31, 0.15);box-sizing: border-box;border-radius: 8px;">
                         {%if user.is_authenticated%}
@@ -136,13 +137,20 @@
                                 </form>
 
 
-
-
                                 <form class="" action="{% url 'purchase' courses.id %}" method="post">
                                     {% csrf_token %}
                                     <br><input class="opinion_submit" type="submit" name="" value="Purchase">
                                 </form>
                                 {% endif %}
+                                <h1>asd</h1>
+                                {% for modules in modules_of_course %}
+                                <form class="" action="{% url 'modules' modules.id %}" method="post">
+                                    {% csrf_token %}
+                                    <h1>{{modules.module_title}}</h1>
+                                    <h2>{{modules.number_of_lecture}}</h2>
+                                    <br><input class="opinion_submit" type="submit" name="" value="Submit">
+                                </form>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
