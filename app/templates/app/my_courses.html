@@ -1,6 +1,6 @@
 {% extends "app/layout.html" %}
 {% load static %}
-<link href="{% static 'app/css/course.css' %}" rel="stylesheet">
+<link href="{% static 'app/css/course.pc_course.css' %}" rel="stylesheet">
 {% block content %}
     <style>
         .container .course_section{
@@ -82,13 +82,13 @@
                 <div class="col-sm-12 col-md-4 col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{course.course_name}}</h5>
-                            <p class="card-text">{{course.course_description|truncatewords:10}}</p>
+                            <h5 class="card-title">{{course.pc_course.course_name}}</h5>
+                            <p class="card-text">{{course.pc_course.course_description|truncatewords:10}}</p>
                             <a class="button-highlight buy-course-button" href="{% url 'get_course_by_id' course.pc_course.id%}">Show Course</a>
                         </div>
                         <div class="card-item d-flex justify-content-around">
                             <div class="text d-flex justify-content-start align-items-center">
-                                <p>{{course.course_date}}</p>
+                                <p>{{course.pc_course.course_date}}</p>
                             </div>
                         </div>
                     </div>
