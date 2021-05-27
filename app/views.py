@@ -117,6 +117,8 @@ def rate_course(request, id):
 class ContactsView(TemplateView):
     template_name = "app/contacts.html"
 
+class HelpView(TemplateView):
+    template_name = "app/help.html"
 
 class AboutView(TemplateView):
     template_name = "app/about.html"

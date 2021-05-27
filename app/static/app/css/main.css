@@ -19,3 +19,15 @@ main {
 * {
     font-family: 'Montserrat', sans-serif;
 }
+#search_field {
+    width: 100%;
+    padding: 12px 24px;
+
+    background-color: transparent;
+    transition: transform 250ms ease-in-out;
+    font-size: 14px;
+    line-height: 18px;
+
+    color: #575756;
+    background-color: transparent;
+}
