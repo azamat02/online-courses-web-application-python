@@ -30,7 +30,7 @@
             </a>
             <li class="nav-item active"><a href="/">Main page</a></li>
             <li class="nav-item"><a href="{% url 'contactUs' %}">Contacts</a></li>
-            <li class="nav-item"><a href="/">Help</a></li>
+            <li class="nav-item"><a href="{% url 'help' %}">Help</a></li>
             {% if user.is_authenticated%}
             <li class="nav-item"><a href="{% url 'my_curses' %}">My curses</a></li>
             {%endif%}
@@ -50,20 +50,20 @@
         {%endif%}
         {%endblock%}
     </nav>
-    <form class="" action="{%url 'search_by_course_text' %}" method="post">
-        {% csrf_token %}
-        <input type="text" name="search_field" value="" method='POST' placeholder="Search here" required>
-        <input type="submit" name="Search" value="Search">
-    </form>
     <main>
-        <section class="banner-part">
+        <section class="banner-part" style="padding-bottom:60px">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4 col-lg-4">
                         <h6 class="red-highlight">Are you ready to Learn?</h6>
                         <h1>Learn With fun on <span class="blue-bg">any schedule</span></h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius blandit facilisis quam netus.</p>
+                        <p>Start learn with us today!</p>
                         <a class="button-highlight" href="{% url 'login' %}">Get Started</a>
+                        <form class="" action="{%url 'search_by_course_text' %}" method="post" style="padding-top: 10px;">
+                            {% csrf_token %}
+                            <input id="search_field"  style="border:none" type="text" name="search_field" value="" method='POST' placeholder="Search course" required>
+                            <input type="image" src="{% static 'app/img/seacrh.png' %}" style="margin-left:6px" name="submit" width="25" height="13" alt="submit"/>
+                        </form>
                     </div>
                     <div class="col-md-8 col-lg-8 img-right">
                         <img class="img-fluid" src="{% static 'app/img/Photos/Illustration.png' %}" alt="">
@@ -72,7 +72,7 @@
             </div>
         </section>
         <!-- Banner part ends -->
-        <section class="categories">
+        <section class="categories" style="padding-bottom: 30px;">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-3 col-lg-3 col-sm-12">

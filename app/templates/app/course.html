@@ -29,7 +29,7 @@
     }
 
     .opinion_submit {
-        background-color: #3A7CA5;
+        background-color: #000000;
         border: none;
         color: white;
         padding: 16px 32px;
@@ -87,10 +87,13 @@
         <div class="course_section">
             <div style="background-color: #3A7CA5;">
                 <div style="margin-left: 20px;margin-top:30px">
-                    <h2 class="course_name">{{ courses.course_name }}</h2>
+                    <h2 class="course_name">Course name: {{ courses.course_name }}</h2>
                     <p class="course_description">
-                        {{ courses.course_description }}
-                        {{ courses.get_rating }}
+                        Course desc description: {{ courses.course_description }}
+                    </p>
+                    <p class="course_description">
+                        Course rating: {{ courses.get_rating }}
+                        <img class="img-fluid" src="{% static 'app/img/star.png' %}" alt="" width="30px" height="15px">
                     </p>
                     <div style="width:300px;height:auto; background-color: white;border: 1px solid rgba(24, 25, 31, 0.15);box-sizing: border-box;border-radius: 8px;">
                         {%if user.is_authenticated%}
@@ -103,13 +106,18 @@
                             {%endfor%}
                             <input class="rate" type="submit" name="" value="Rate">
                         </form>
+                    </div>
+                        <form class="" action="{% url 'purchase' courses.id %}" method="post" style="padding-top: 30px">
+                            <p class="course_name">Do you want get this course? CLICK!</p>
+                            {% csrf_token %}
+                            <br><input class="opinion_submit" type="submit" name="" value="Purchase">
+                        </form>
                         {% endif %}
                     </div>
                 </div>
-            </div>
             <div style="background-color: #f7f6f6">
                 {%if user.is_authenticated%}
-                <div class="container mt-5">
+                <div class="container mt-5" style="padding-bottom: 30px;">
                     <div class="row d-flex justify-content-center">
                         <div class="col-md-8">
                             <div class="headings d-flex justify-content-between align-items-center mb-3">
@@ -136,24 +144,31 @@
                                     <br><input class="opinion_submit" type="submit" name="" value="Submit">
                                 </form>
 
-
-                                <form class="" action="{% url 'purchase' courses.id %}" method="post">
-                                    {% csrf_token %}
-                                    <br><input class="opinion_submit" type="submit" name="" value="Purchase">
-                                </form>
                                 {% endif %}
-                                <h1>asd</h1>
-                                {% for modules in modules_of_course %}
-                                <form class="" action="{% url 'modules' modules.id %}" method="post">
-                                    {% csrf_token %}
-                                    <h1>{{modules.module_title}}</h1>
-                                    <h2>{{modules.number_of_lecture}}</h2>
-                                    <br><input class="opinion_submit" type="submit" name="" value="Submit">
-                                </form>
-                                {% endfor %}
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modules" style="padding-top: 30px">
+            <h1 class="course__modules" style="text-align: center">Course modules</h1>
+            <div class="container course-content">
+                <div class="card-deck row">
+                    {% for modules in modules_of_course %}
+                    <form class="" action="{% url 'modules' modules.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="col-lg-12 col-md-4 col-lg-4" style="padding-right:30px">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{modules.module_title}}</h5>
+                                    <p class="card-text">{{modules.number_of_lecture}}</p>
+                                    <br><input class="opinion_submit" type="submit" name="" value="Submit">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -117,10 +117,11 @@ def rate_course(request, id):
 class ContactsView(TemplateView):
     template_name = "app/contacts.html"
 
+class HelpView(TemplateView):
+    template_name = "app/help.html"
 
 class AboutView(TemplateView):
     template_name = "app/about.html"
-
 
 class ProfileView(TemplateView):
     template_name = "registration/user_page.html"
@@ -128,7 +129,6 @@ class ProfileView(TemplateView):
 
 class ChangeView(TemplateView):
     template_name = "register/change_user.html"
-
 
 def search_by_course_text(request):
     if request.method == "POST" and len(request.POST.get("search_field")) > 0:
