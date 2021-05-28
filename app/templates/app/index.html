@@ -61,8 +61,8 @@
                         <a class="button-highlight" href="{% url 'login' %}">Get Started</a>
                         <form class="" action="{%url 'search_by_course_text' %}" method="post" style="padding-top: 10px;">
                             {% csrf_token %}
-                            <input id="search_field"  style="border:none" type="text" name="search_field" value="" method='POST' placeholder="Search here" required>
-                            <input type="submit" style="border:none; background: url(/app/static/app/img/seacrh.png) no-repeat scroll 7px 7px" value="Go">
+                            <input id="search_field"  style="border:none" type="text" name="search_field" value="" method='POST' placeholder="Search course" required>
+                            <input type="image" src="{% static 'app/img/seacrh.png' %}" style="margin-left:6px" name="submit" width="25" height="13" alt="submit"/>
                         </form>
                     </div>
                     <div class="col-md-8 col-lg-8 img-right">
