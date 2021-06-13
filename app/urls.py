@@ -25,4 +25,5 @@ urlpatterns = [
     path('search/', search_by_course_text, name='search_by_course_text'),
     path('search/<str:text>/', search_success, name='search_success'),
     path("user/<username>", ProfileView.as_view(), name="profile"),
+    path("course/<int:id>/notify", send_email, name="send_email")
 ]
