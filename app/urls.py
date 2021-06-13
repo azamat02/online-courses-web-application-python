@@ -18,11 +18,11 @@ urlpatterns = [
     path('course/<int:id>/leaving_comment', leave_comment, name='leave_comment'),
     path('all_course/', AllCourses.as_view(), name="allCourses"),
     path('aboutUs', AboutView.as_view(), name="aboutUs"),
+    path('help', HelpView.as_view(), name="help"),
     path("course/id", GetCourseByID, name="courseID"),
     path("contactUs", ContactsView.as_view(), name="contactUs"),
     path("my_curses/", my_courses, name="my_curses"),
     path('search/', search_by_course_text, name='search_by_course_text'),
     path('search/<str:text>/', search_success, name='search_success'),
     path("user/<username>", ProfileView.as_view(), name="profile"),
-    path('help', HelpView.as_view(), name="help"),
 ]

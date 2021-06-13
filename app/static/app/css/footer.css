@@ -8,8 +8,6 @@ footer {
     grid-gap: 40px;
     background-color: #DFD6D6;
     padding: 0px 180px 0px 180px;
-    position: fixed; /* Фиксированное положение */
-    left: 0; bottom: 0;
 }
 
 .text-green {

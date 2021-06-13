@@ -61,6 +61,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5
 }
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

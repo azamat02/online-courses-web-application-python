@@ -1,29 +1,14 @@
-{% extends "app/layout.html" %}
-{% load static %}
-<link href="{% static 'app/css/search.css' %}" rel="stylesheet">
-{% block content %}
-    <h1 style="padding-top: 30px; padding-bottom: 90px;text-align: center">Results</h1>
+  {% if search_res %}
+    {% for course in search_res %}
     <div class="row">
-        <div class="col-md-4">
-            <table class="table table-striped table-hover">
-                <thead>
-                <th>№</th>
-                <th>title</th>
-                <th>description</th>
-                </thead>
-                {% if search_res %}
-                    {% for course in search_res %}
-                <tbody>
-                    <td><strong>{{ forloop.counter }} </strong></td>
-                    <td><strong><a href="{% url 'get_course_by_id' course.id%}">{{course.course_name}}</a></strong></td>
-                    <td>{{course.course_description|truncatewords:10}}</td>
-
-                {% endfor %}
-                {% else %}
-                    {{empty_res}}
-                {% endif %}
-                </tbody>
-            </table>
+        <div class="col-md-3 portfolio-item">
+            <h3>
+                <a href="{% url 'get_course_by_id' course.id%}">{{course.course_name}}</a>
+            </h3>
+            <p>{{course.course_description|truncatewords:10}}</p>
         </div>
     </div>
-{% endblock %}
+        {% endfor %}
+    {% else %}
+      {{empty_res}}
+    {% endif %}

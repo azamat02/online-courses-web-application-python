@@ -1,11 +1,4 @@
-{% extends "app/layout.html" %}
-{% load static %}
-<link href="{% static 'app/css/course.css' %}" rel="stylesheet">
-{% block content %}
-<div style="padding-bottom: 240px; padding-top: 30px;">
 {% for video in result %}
-<h1 style="text-align: center"> Video title: {{video.video_title}}</h1>
-<a href="{{video.video_link}}">LEARN TOGETHER!</a>
+<h1>{{video.video_title}}</h1>
+<h3>{{video.video_link}}</h3>
 {% endfor %}
-</div>
-{% endblock %}
