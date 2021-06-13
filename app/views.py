@@ -10,7 +10,9 @@ from .serializers import *
 from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view  # making sure to receive Request, add context to Response
 from rest_framework.response import Response  # is needed to return client defined response
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 class IndexView(ListView):
     template_name = "app/index.html"
@@ -73,6 +75,24 @@ def purchase_courses(request, id):
         return redirect("index")
 
 
+def send_email(request, id):
+    if request.method == 'POST':
+        users = SimpleUser.objects.order_by('id')
+        course = Courses.objects.get(pk=id)
+        msg = MIMEMultipart()
+        message = 'У нас новый курс, Название курса :' + course.course_name
+        msg.attach(MIMEText(message, 'plain'))
+        for user in users:
+            to_email = user.email
+            server = smtplib.SMTP('smtp.mail.ru: 25')
+            server.starttls()
+            server.login("ngfsendemail@mail.ru", "farainlovewith02")
+            server.sendmail("ngfsendemail@mail.ru", to_email, msg.as_string())
+            server.quit()
+        return redirect("index")
+
+
+
 def check_for_purchased(request, id):
     check = True
     try:
@@ -117,6 +137,8 @@ def rate_course(request, id):
 class ContactsView(TemplateView):
     template_name = "app/contacts.html"
 
+class HelpView(TemplateView):
+    template_name = "app/help.html"
 
 class AboutView(TemplateView):
     template_name = "app/about.html"

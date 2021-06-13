@@ -151,6 +151,12 @@
                                     <br><input class="opinion_submit" type="submit" name="" value="Submit">
                                 </form>
                                 {% endfor %}
+                                {%if user.is_staff%}
+                                <form class="" action="{% url 'send_email' courses.id %}" method="post">
+                                    {% csrf_token %}
+                                    <br><input class="opinion_submit" type="submit" name="" value="Send notification">
+                                </form>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
