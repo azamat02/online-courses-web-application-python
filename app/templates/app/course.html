@@ -90,7 +90,11 @@
                     <h2 class="course_name">{{ courses.course_name }}</h2>
                     <p class="course_description">
                         {{ courses.course_description }}
-                        {{ courses.get_rating }}
+                        {%if courses.count_rating != 0%}
+                            {{ courses.get_rating}}
+                        {% else %}
+                            0
+                        {% endif %}
                     </p>
                     <div style="width:300px;height:auto; background-color: white;border: 1px solid rgba(24, 25, 31, 0.15);box-sizing: border-box;border-radius: 8px;">
                         {%if user.is_authenticated%}

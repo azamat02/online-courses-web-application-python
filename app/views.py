@@ -80,14 +80,14 @@ def send_email(request, id):
         users = SimpleUser.objects.order_by('id')
         course = Courses.objects.get(pk=id)
         msg = MIMEMultipart()
-        message = 'У нас новый курс, Название курса :' + course.course_name
+        message = 'У нас новый курс, Название курса :' + course.course_name + " http://127.0.0.1:8000/course/" + str(course.id)
         msg.attach(MIMEText(message, 'plain'))
         server = smtplib.SMTP('smtp.mail.ru: 25')
         server.starttls()
         for user in users:
             to_email = user.email
-            server.login("ngfsendemail@mail.ru", "farainlovewith02")
-            server.sendmail("ngfsendemail@mail.ru", to_email, msg.as_string())
+            server.login("ngfnotify@mail.ru", "faraonlovewith02")
+            server.sendmail("ngfnotify@mail.ru", to_email, msg.as_string())
         server.quit()
         return redirect("index")
 
