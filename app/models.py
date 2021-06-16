@@ -21,7 +21,7 @@ class Courses(models.Model):
         return self.course_name
 
     def get_rating(self):
-        return int(self.sum_rating / self.count_rating)
+        return int(self.sum_rating / self.count_rating * 100) / 100
 
 class Comment(models.Model):
     comment_text = models.TextField('comment_text')
