@@ -2,171 +2,118 @@
 {% load static %}
 <link href="{% static 'app/css/course.css' %}" rel="stylesheet">
 {% block content %}
-<style>
-    .container .course_section {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-column-gap: 50px;
-    }
 
-    .card {
-        border: none;
-        box-shadow: 5px 6px 6px 2px #e9ecef;
-        border-radius: 4px
-    }
-
-    .icons i {
-        margin-left: 8px
-    }
-
-    .reply small {
-        color: #b7b4b4
-    }
-
-    .reply small:hover {
-        color: green;
-        cursor: pointer;
-    }
-
-    .opinion_submit {
-        background-color: #3A7CA5;
-        border: none;
-        color: white;
-        padding: 16px 32px;
-        text-decoration: none;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-
-    .course_name {
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 24px;
-        line-height: 32px;
-        font-feature-settings: 'liga' off;
-        color: #FFFFFF;
-    }
-
-    .course_description {
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 16px;
-        line-height: 26px;
-        font-feature-settings: 'liga' off;
-        color: #FFFFFF;
-    }
-
-    .rating {
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 12px;
-        line-height: 16px;
-        /* identical to box height, or 133% */
-
-        display: flex;
-        align-items: center;
-        text-transform: uppercase;
-        color: #3A7CA5;
-    }
-
-    .rate {
-        background-color: #FFFFFF;
-        border: none;
-        color: #3A7CA5;
-        padding: 16px 32px;
-        text-decoration: none;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-</style>
-<section class="banner_course" style="padding-top: 30px">
-    <div class="container">
-        <div class="course_section">
-            <div style="background-color: #3A7CA5;">
-                <div style="margin-left: 20px;margin-top:30px">
-                    <h2 class="course_name">{{ courses.course_name }}</h2>
-                    <p class="course_description">
-                        {{ courses.course_description }}
-                        {%if courses.count_rating != 0%}
+<div class="px-44 my-12">
+    <div class="header">
+        <h1 class="text-4xl font-bold text-blue-500">{{ courses.course_name }}</h1>
+        <p class="my-12 text-xl text-gray-500">
+            {{ courses.course_description }}
+        </p>
+        <div class="flex items-center">
+            <div class="rating flex items-center justify-between bg-yellow-100 w-28 px-4 py-2 rounded-md text-yellow-900 text-xl font-bold border-2 border-yellow-500">
+                <img src="https://bit.ly/3wwNjAG" width="25" height="25" alt="">
+                <span class="px-2">
+                    {%if courses.count_rating != 0%}
                         {{ courses.get_rating}}
-                        {% else %}
+                    {% else %}
                         0
-                        {% endif %}
-                    </p>
-                    <div style="width:300px;height:auto; background-color: white;border: 1px solid rgba(24, 25, 31, 0.15);box-sizing: border-box;border-radius: 8px;">
-                        {%if user.is_authenticated%}
-                        <p class="rating" style="margin-left: 10px">Rate course from 1 to 5: </p>
-                        <form class="" style="margin-left: 10px" action="{% url 'rate_course' courses.id %}"
-                              method="post">
-                            {% csrf_token %}
-                            {% for i in '12345'|make_list %}
-                            <input class="custom-radio" type="radio" name="rate_val" value="{{forloop.counter}}">
-                            {%endfor%}
-                            <input class="rate" type="submit" name="" value="Rate">
-                        </form>
-                        {% endif %}
-                    </div>
-                </div>
+                    {% endif %}
+                </span>
             </div>
-            <div style="background-color: #f7f6f6">
-                {%if user.is_authenticated%}
-                <div class="container mt-5">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-md-8">
-                            <div class="headings d-flex justify-content-between align-items-center mb-3">
-                                <h5>Comments</h5>
-                            </div>
-                            <div class="card p-3">
-                                {% if comments_of_course %}
-                                {% for comment in comments_of_course %}
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="user d-flex flex-row align-items-center">
-                                                <span><small class="font-weight-bold text-primary">{{comment.comment_user.username}}</small>
-                                                    <small class="font-weight-bold">{{comment.comment_text}}</small>
-                                                </span>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                                {% else %}
-                                <p>No comments on this article yet</p>
-                                {% endif %}
-                                <form class="" action="{% url 'leave_comment' courses.id %}" method="post">
-                                    {% csrf_token %}
-                                    <textarea style="width:300px;margin-right: 30px;" name="comment_text" rows="8"
-                                              cols="80" placeholder="Leave your thoughts" required></textarea>
-                                    <br><input class="opinion_submit" type="submit" name="" value="Submit">
-                                </form>
-
-
-                                <form class="" action="{% url 'purchase' courses.id %}" method="post">
-                                    {% csrf_token %}
-                                    <br><input class="opinion_submit" type="submit" name="" value="Purchase">
-                                </form>
-                                {% endif %}
-                                <h1>asd</h1>
-                                {% for modules in modules_of_course %}
-                                <form class="" action="{% url 'modules' modules.id %}" method="post">
-                                    {% csrf_token %}
-                                    <h1>{{modules.module_title}}</h1>
-                                    <h2>{{modules.number_of_lecture}}</h2>
-                                    <br><input class="opinion_submit" type="submit" name="" value="Submit">
-                                </form>
-                                {% endfor %}
-                                {%if user.is_staff%}
-                                <form class="" action="{% url 'send_email' courses.id %}" method="post">
-                                    {% csrf_token %}
-                                    <br><input class="opinion_submit" type="submit" name="" value="Send notification">
-                                </form>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+            <form class="ml-10 mb-3" action="{% url 'purchase' courses.id %}" method="post">
+                {% csrf_token %}
+                <br><input class="bg-green-500 rounded-md px-4 py-2 text-white font-bold" type="submit" name="" value="Purchase course">
+            </form>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <h1 class="text-2xl font-bold text-purple-500">Course modules</h1>
+        {% for modules in modules_of_course %}
+        <form class="" action="{% url 'modules' modules.id %}" method="post">
+            {% csrf_token %}
+            <br>
+            <div class="flex items-center justify-between border-2 px-4 py-3 w-1/2 rounded-md shadow-md mb-5">
+                <div>
+                    <h1 class="text-blue-500 text-xl font-bold mb-2">{{modules.module_title}}</h1>
+                    <h2 class="text-gray-600 font-medium">{{modules.number_of_lecture}} lectures</h2>
                 </div>
+                <input class="bg-blue-500 rounded-md px-4 py-2 text-white font-bold" type="submit" name="" value="Open module">
+            </div>
+        </form>
+        {% endfor %}
+        <br>
+        {%if user.is_staff%}
+        <h1 class="px-4 py-2 bg-blue-100 text-blue-700 text-2xl font-bold border-l-4 border-blue-700 w-1/4">Stuff actions</h1>
+        <form class="" action="{% url 'send_email' courses.id %}" method="post">
+            {% csrf_token %}
+            <br><input class="bg-red-500 rounded-md px-4 py-2 text-white font-bold" type="submit" name="" value="Send notification">
+        </form>
+        {% endif %}
+
+
+        <br>
+        <hr>
+        <br>
+        <h1 class="text-2xl font-bold text-yellow-500">Rate course</h1>
+        <div class="my-3">
+            <form action="{% url 'rate_course' courses.id %}" method="post">
+                {% csrf_token %}
+
+                <div class="flex">
+                    {% for i in '12345'|make_list %}
+                        <div class="flex mr-2 items-center justify-around px-3 py-2 w-28 bg-blue-100 text-xl text-blue-500 rounded-md">
+                            <input class="custom-radio" type="radio" name="rate_val" value="{{forloop.counter}}">
+                            <span class="font-bold">
+                                {{forloop.counter}}
+                            </span>
+                            <img src="https://bit.ly/3wwNjAG" width="25" height="25" alt="">
+                        </div>
+                    {%endfor%}
+                </div>
+                <button class="bg-blue-500 rounded-md px-4 py-2 text-white font-bold my-2 hover:bg-blue-600 transition focus:outline-none focus:ring-2" type="submit">Rate</button>
+            </form>
+        </div>
+        <br>
+        <hr>
+        <br>
+
+        <div>
+            <h1 class="text-2xl font-bold text-blue-500">Comments</h1>
+            <div class="mt-4">
+                {% if comments_of_course %}
+                {% for comment in comments_of_course %}
+                    <div class="shadow-md rounded-md bg-gray-100 border-2 p-4 w-1/2 my-3">
+                        <h1 class="text-gray-900 font-bold mb-3">{{comment.comment_user.username}}</h1>
+                        <p class="italic text-gray-600 font-medium">{{comment.comment_text}}</p>
+                    </div>
+                {% endfor %}
+                {% else %}
+                    <p>No comments on this article yet</p>
+                {% endif %}
+
+                {%if user.is_authenticated%}
+                <div class="mt-10">
+                    <form action="{% url 'leave_comment' courses.id %}" method="post">
+                        {% csrf_token %}
+                            <h1 class="my-3 text-gray-900 font-bold text-2xl">Leave your comment</h1>
+                            <textarea class="border-2 rounded-lg focus:outline-none px-4 py-3 focus:ring-2 focus:ring-purple-600" name="comment_text" rows="8"
+                                      cols="80" placeholder="Type here..." required></textarea>
+
+                            <br><input class="px-4 py-2 bg-blue-500 text-white font-bold rounded-md w-52 text-center" type="submit" name="" value="Submit">
+                    </form>
+                </div>
+                <br>
+                <hr>
+                <br>
+
+                {% endif %}
+
             </div>
         </div>
+
     </div>
-</section>
+</div>
+
+
 {% endblock %}

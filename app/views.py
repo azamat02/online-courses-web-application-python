@@ -86,8 +86,8 @@ def send_email(request, id):
         server.starttls()
         for user in users:
             to_email = user.email
-            server.login("ngfsendemail@mail.ru", "farainlovewith02")
-            server.sendmail("ngfsendemail@mail.ru", to_email, msg.as_string())
+            server.login("ngfnotify@mail.ru", "faraonlovewith02")
+            server.sendmail("ngfnotify@mail.ru", to_email, msg.as_string())
         server.quit()
         return redirect("index")
 
