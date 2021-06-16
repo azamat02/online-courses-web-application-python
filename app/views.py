@@ -80,7 +80,7 @@ def send_email(request, id):
         users = SimpleUser.objects.order_by('id')
         course = Courses.objects.get(pk=id)
         msg = MIMEMultipart()
-        message = 'У нас новый курс, Название курса :' + course.course_name
+        message = 'У нас новый курс, Название курса :' + course.course_name + " http://127.0.0.1:8000/course/" + str(course.id)
         msg.attach(MIMEText(message, 'plain'))
         server = smtplib.SMTP('smtp.mail.ru: 25')
         server.starttls()
@@ -91,8 +91,6 @@ def send_email(request, id):
         server.quit()
         return redirect("index")
 
-
-
 def check_for_purchased(request, id):
     check = True
     try:
@@ -101,7 +99,6 @@ def check_for_purchased(request, id):
     except:
         check = False
     return check
-
 
 def leave_comment(request, id):
     if check_for_purchased(request, id):
